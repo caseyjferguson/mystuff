@@ -14,6 +14,7 @@ pile_looted = False
 axe_broken = False
 rock = False
 snake_found = False
+treasure_found = False
 #dead
 def dead(cause):
 	print cause,"You have died."
@@ -251,10 +252,106 @@ def snake_room():
 		print "I don't know what you mean."
 	snake_room()
 	
-		
 #large_chest_room
+def large_chest_room():
+	global sword_found
+	global g
+	print '''
+	This room contains only a large gilded chest and velvet tapestry.
+	The chest appears unlocked.
+	There is a door to the north, and one to the east.
+	'''
+	
+	dec = raw_input(p)
+	
+	if "open" in dec:
+		print '''
+		You open the chest.
+		Inside there lies a glowing longsword
+		and a large pile of gold pieces.
+		'''
+		sword_found = True
+		g += 100
+	elif "chest" in dec:
+		print "The chest has inscriptions of a firebreathing dragon on it's gilded lid."
+	elif dec == "gold":
+		gold()
+	elif dec == "hint":
+		hint()
+	elif "north" in dec:
+		one_four_room()
+	elif "east" in dec and not key_found:
+		print "This door is locked."
+	elif "east" in dec:
+		print "You used the key."
+		arrow_room()
+	else:
+		print "I don't know what you mean."
+	large_chest_room()
+		
 #one_four_room
+def one_four_room():
+	print '''
+	This corridor has three doors, 
+	on the north, west, and south walls.
+	'''
+	
+	dec = raw_input(p)
+	
+	if dec == "gold":
+		gold()
+	elif dec == "hint":
+		hint()
+	elif "north" in dec and not key_found:
+		print "This door is locked."
+	elif "north" in dec:
+		treasure_room()
+	elif "south" in dec:
+		large_chest_room()
+	elif "west" in dec:
+		zero_four_room()
+	else:
+		print "I don't know what you mean."
+	one_four_room()
+		
 #treasure_room
+def treasure_room():
+	global g
+	global treasure_found
+	if treasure_found:
+		found = "This room once held the castles treasure."
+	else:
+		found = "This room is filled with many gems and golden trinkets."
+	print '''
+	Congratulations!
+	You have reached your goal!
+	%s
+	''' % found
+	
+	dec = raw_input(p)
+	
+	if dec == "gold":
+		gold()
+	elif dec == "hint":
+		print "Why do you need a hint now?"
+	elif "take" in dec or "loot" in dec:
+		print "You %s." % dec
+		g += 400
+		treasure_found = True
+	elif "south" in dec and not key_found:
+		print "This door is locked."
+	elif "south" in dec:
+		one_four_room()
+	elif "east" in dec:
+		dragon_room()
+	elif "treasure" in dec:
+		print "The treasure appears to be worth about 400 gold pieces."
+	elif "gem" in dec:
+		print "There appears to be several rubies and emeralds in the pile."
+	else:
+		print "I don't know what you mean."
+	treasure_room()
+	
 #two_one_room
 #two_two_room
 #arrow_room
