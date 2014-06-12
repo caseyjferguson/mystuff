@@ -1,3 +1,4 @@
+from time import sleep
 from sys import exit
 import random
 p = "> "
@@ -15,6 +16,44 @@ axe_broken = False
 rock = False
 snake_found = False
 treasure_found = False
+dragon_health = 100
+
+def win():
+	print '''
+	You have escaped the castle victorious!
+	You looted %d gold pieces in your adventure
+	and have slain a fearsome dragon.
+	
+	Thank you for playing!
+	
+	''' % g
+	sleep(3)
+	print '''
+	Programmed and written by: Casey Ferguson
+	
+	'''
+	sleep(3)
+	print '''
+	Special thanks to Zed Shaw for teaching me Python "the hard way"
+	
+	'''
+	sleep(3)
+	print '''
+	Copyright 2014 - Cesium Knight Games
+	All rights reserved.
+	
+	'''
+	sleep(3)
+	print '''
+	Reproduction permitted with permission from Casey Ferguson
+	caseyjferguson@gmail.com
+	'''
+	exit(0)
+	
+
+def idk():
+	print "I don't know what you mean."
+
 #dead
 def dead(cause):
 	print cause,"You have died."
@@ -65,7 +104,7 @@ def small_chest_room():
 	elif dec == "hint":
 		hint()
 	else:
-		print "I don't know what you mean."
+		idk()
 	
 	small_chest_room()
 
@@ -87,7 +126,7 @@ def zero_two_room():
 	elif dec == "hint":
 		hint()
 	else:
-		print "I don't know what you mean."
+		idk()
 	zero_two_room()
 	
 #axe_room
@@ -132,7 +171,7 @@ def axe_room(side):
 	elif dec == "hint":
 		hint()
 	else:
-		print "I don't know what you mean."
+		idk()
 	axe_room(side)
 	
 		
@@ -149,7 +188,7 @@ def zero_four_room():
 	elif "east" in dec:
 		one_four_room()
 	else:
-		print "I don't know what you mean."
+		idk()
 	zero_four_room()
 
 #hint_room
@@ -196,7 +235,7 @@ def hint_room():
 	elif "man" in dec:
 		print "The man is blind and gray haired, with a blindfold over his eyes."
 	else:
-		print "I don't know what you mean."
+		idk()
 	hint_room()
 		
 #snake_room
@@ -249,7 +288,7 @@ def snake_room():
 	elif "west" in dec:
 		zero_two_room()
 	else:
-		print "I don't know what you mean."
+		idk()
 	snake_room()
 	
 #large_chest_room
@@ -286,7 +325,7 @@ def large_chest_room():
 		print "You used the key."
 		arrow_room()
 	else:
-		print "I don't know what you mean."
+		idk()
 	large_chest_room()
 		
 #one_four_room
@@ -311,7 +350,7 @@ def one_four_room():
 	elif "west" in dec:
 		zero_four_room()
 	else:
-		print "I don't know what you mean."
+		idk()
 	one_four_room()
 		
 #treasure_room
@@ -349,18 +388,246 @@ def treasure_room():
 	elif "gem" in dec:
 		print "There appears to be several rubies and emeralds in the pile."
 	else:
-		print "I don't know what you mean."
+		idk()
 	treasure_room()
 	
 #two_one_room
-#two_two_room
-#arrow_room
-#two_four_room
-#dragon_room
-#pungee_room
-#key_room
-#bottomless_pit_room
+def two_one_room():
+	print '''
+	This is a sweeping corridor.
+	There are doors on the north and west walls.
+	'''
 
+	dec = raw_input(p)
+	
+	if dec == "gold":
+		gold()
+	elif dec == "hint":
+		hint()
+	elif "north" in dec:
+		two_two_room()
+	elif "west" in dec:
+		hint_room()
+	else:
+		idk()
+	two_one_room()
+
+#two_two_room
+def two_two_room():
+	print '''
+	This is a straight and empty corridor,
+	save for the tapestry on the walls.
+	'''
+	
+	dec = raw_input(p)
+	
+	if dec == "gold":
+		gold()
+	elif dec == "hint":
+		hint()
+	elif "tapestry" in dec:
+		print "The tapestry depicts a large red dragon sleeping in a room too small for it."
+	elif "north" in dec:
+		arrow_room()
+	elif "south" in dec:
+		two_one_room()
+	else:
+		idk()
+	two_two_room()
+
+#arrow_room
+def arrow_room():
+	print '''
+	This room is large and dark.
+	In the center of the room on the floor
+	there is a glowing white arrow facing the eastern door.
+	There are doors on every wall.
+	'''
+	
+	dec = raw_input(p)
+	
+	if dec == "gold":
+		gold()
+	elif dec == "hint":
+		hint()
+	elif "arrow" in dec:
+		print '''
+		The arrow glows in the dark room,
+		as if by magic. It points to the
+		eastern door.
+		'''
+	elif "north" in dec:
+		two_four_room()
+	elif "west" in dec and not key_found:
+		print "This door is locked."
+	elif "west" in dec:
+		large_chest_room()
+	elif "south" in dec:
+		two_two_room()
+	elif "east" in dec:
+		pungee_room()
+	else:
+		idk()
+	arrow_room()
+		
+#two_four_room
+def two_four_room():
+	print '''
+	This is a straight hallway, 
+	with a door on the east wall.
+	'''
+	
+	dec = raw_input(p)
+	
+	if dec == "gold":
+		gold()
+	elif dec == "hint":
+		hint()
+	elif "east" in dec:
+		key_room()
+	elif "north" in dec:
+		dragon_room()
+	elif "south" in dec:
+		arrow_room()
+	else:
+		idk()
+	two_four_room()
+	
+#dragon_room
+def dragon_room():
+	global dragon_health
+	global dragon_dead
+	if dragon_dead:
+		dragon = "dead"
+		lived = " "
+	else:
+		dragon = "red"
+		lived = " has "
+	print '''
+	Before you lies a large %s dragon.
+	It appears to be much too large to have entered this room.
+	It%slikely lived here much of its life in solitude.
+	The room smells of smoke and charred flesh.
+	There are bones strewn around the room.
+	''' % (dragon, lived)
+	
+	dec = raw_input(p)
+	
+	if dec == "gold":
+		gold()
+	elif dec == "hint":
+		hint()
+	elif ("attack" in dec or "kill" in dec) and sword_found and not dragon_dead:
+		print "You take a swing at the dragon with your sword."
+		hit = random.randrange(1,100)
+		sleep(1)
+		if hit >= 30:
+			print "Your blow lands on the dragon."
+		else:
+			print "You fail to land a strike."
+		dragon_health -= hit
+		if dragon_health <= 0:
+			dragon_dead = True
+	elif "dragon":
+		print "It is large and red, with scales the size of many shields."
+	else:
+		idk()
+	
+	if dragon_dead == False:
+		print '''
+		The dragon notices your presence and attacks.
+		'''
+	
+		dec = raw_input(p)
+		hit = random.randrange(1,100)
+		if hit >= 80:
+			attack = "fire"
+		else:
+			attack = "his claws"
+		if "dodge" in dec:
+			print "The dragon attacks with %s and you dodge the attack." % attack
+			dragon_room()
+		elif "block" in dec and attack == "claws" and sword_found == true:
+			print "The dragon attacks with his claws and you successfully block with your sword."
+			dragon_room()
+		elif "block" in dec and attack == "fire":
+			dead("The dragon attacks with fire and your block is ineffective. You are charred.")
+		elif "block" in dec:
+			dead("The dragon attacks with %s and you have nothing to block with." % attack)
+		else:
+			dead("The dragon attacks with %s." % attack)
+	else:
+		print '''
+		Congratulations, the dragon has been defeated.
+		There are doors on every wall.
+		The north door has a barred slit that daylight shows through.
+		'''
+		
+		dec = raw_input(p)
+		
+		if dec == "gold":
+			gold()
+		elif dec == "hint":
+			hint()
+		elif "east" in dec:
+			bottomless_pit_room()
+		elif "north" in dec:
+			win()
+		elif "south" in dec:
+			two_four_room()
+		elif "west" in dec:
+			treasure_room()
+		else:
+			idk()
+		dragon_room()
+		
+#pungee_room
+def pungee_room():
+	dead("You step into a very dark room, and as you take your step in, the floor gives way. You are impaled on pungee spikes.")
+
+#key_room
+def key_room():
+	global key_found
+	print '''
+	A brightly colored room lies before you.
+	There are doors on the west wall and south wall.
+	'''
+	if key_found:
+		print '''
+		A golden pedestal where a key once laid sits in the middle of the room.
+		'''
+	else:
+		print '''
+		A key is illuminated on a golden pedestal in the center of the room.
+		'''
+	
+	dec = raw_input(p)
+	
+	if dec == "gold":
+		gold()
+	elif dec == "hint":
+		hint()
+	elif "take" in dec or "loot" in dec and not key_found:
+		key_found = True
+		print "You have retrieved the key."
+	elif "key" in dec:
+		print "The key is solid gold with a ruby serpent embedded in the handle."
+	elif "south" in dec:
+		pungee_room()
+	elif "west" in dec:
+		two_four_room()
+	else:
+		idk()
+	key_room()
+	
+#bottomless_pit_room
+def bottomless_pit_room():
+	print "You step into an abyss and begin falling."
+	fallcount = random.randrange(10,40)
+	for i in range(1, fallcount):
+		print "Still falling..."
+		sleep(2)
+	dead("You land with a splat on a hard bedrock surface.")
 def start():
 	print '''
 	Welcome to the castle of wonder!
@@ -392,6 +659,8 @@ def foyer():
 	elif "west" in door:
 		print "You chose the west door."
 		spider_room("foyer")
+	elif "south" in door and dragon_dead:
+		win()
 	elif "south" in door:
 		print "You are now leaving the castle of wonder."
 		print "Have a good day!"
@@ -401,7 +670,8 @@ def foyer():
 	elif door == "gold":
 		gold()
 	else:
-		foyer()
+		idk()
+	foyer()
 		
 def mamba_room():
 	dead("As you step into the room, you are immediately bitten by a deadly black mamba.")
@@ -409,7 +679,6 @@ def mamba_room():
 def spider_room(entry):
 	global spider_dead
 	spider = "You hear the skittering of a large spider approaching you"
-	print spider_dead
 	if spider_dead == False:
 		spider = "You hear the skittering of a large spider approaching you"
 	else:
